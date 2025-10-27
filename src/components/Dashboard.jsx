@@ -6,11 +6,14 @@ import {
   Clock,
   XCircle,
   Ticket,
+  Menu,
+  X,
 } from "lucide-react";
 import Footer from "./Footer";
 
 const Dashboard = ({ onNavigate, onLogout, user }) => {
   const [tickets, setTickets] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const stored = localStorage.getItem("tickets");
@@ -31,6 +34,7 @@ const Dashboard = ({ onNavigate, onLogout, user }) => {
       <nav className="bg-white shadow-sm">
         <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
+            {/* Logo Section */}
             <div className="flex items-center gap-2">
               <div className="bg-linear-to-br from-blue-600 to-purple-600 p-2 rounded-lg">
                 <Ticket className="w-6 h-6 text-white" />
@@ -39,7 +43,9 @@ const Dashboard = ({ onNavigate, onLogout, user }) => {
                 TicketFlow
               </span>
             </div>
-            <div className="flex items-center gap-4">
+
+            {/* Desktop Menu */}
+            <div className="hidden md:flex items-center gap-4">
               <span className="text-gray-700 font-medium">
                 Welcome, {user?.name}
               </span>
@@ -51,8 +57,36 @@ const Dashboard = ({ onNavigate, onLogout, user }) => {
                 Logout
               </button>
             </div>
+
+            {/* Mobile Menu Button */}
+            <div className="md:hidden">
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="p-2 rounded-md hover:bg-gray-100 transition"
+              >
+                {isOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
           </div>
         </div>
+
+        {/* Mobile Dropdown */}
+        {isOpen && (
+          <div className="md:hidden border-t border-gray-100 bg-white px-4 pb-4">
+            <div className="flex flex-col gap-3 pt-3">
+              <span className="text-gray-700 font-medium">
+                Welcome, {user?.name}
+              </span>
+              <button
+                onClick={onLogout}
+                className="flex items-center justify-center gap-2 px-4 py-2 bg-red-500 rounded-lg hover:shadow-lg hover:shadow-red-500/50 transition-all duration-300 hover:scale-105 transform text-white cursor-pointer"
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+            </div>
+          </div>
+        )}
       </nav>
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
